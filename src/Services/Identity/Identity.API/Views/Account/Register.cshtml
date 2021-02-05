@@ -1,0 +1,10 @@
+@model drDotnet.Services.Identity.API.Models.AccountViewModels.RegisterViewModel
+
+<form asp-controller="Account" asp-action="Register" method="post">
+    <input asp-for="Email" />
+    <input asp-for="Password" />
+    <input asp-for="ConfirmPassword" />
+    <button type="submit">Register</button>
+</form>
+
+<div asp-validation-summary="All"></div>

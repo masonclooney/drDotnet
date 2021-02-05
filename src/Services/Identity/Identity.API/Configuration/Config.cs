@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using IdentityServer4.Models;
 
-namespace drDotnet.Services.Identity.Configuration
+namespace drDotnet.Services.Identity.API.Configuration
 {
     public class Config
     {
