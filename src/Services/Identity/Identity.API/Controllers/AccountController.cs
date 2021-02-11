@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using drDotnet.Services.Identity.API.Models;
 using drDotnet.Services.Identity.API.Models.AccountViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,10 +14,44 @@ namespace drDotnet.Services.Identity.API.Controllers
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(UserManager<AppIdentityUser> userManager, ILogger<AccountController> logger)
+        private readonly SignInManager<AppIdentityUser> _signInManager;
+
+        public AccountController(UserManager<AppIdentityUser> userManager, ILogger<AccountController> logger, SignInManager<AppIdentityUser> signInManager)
         {
             _userManager = userManager;
             _logger = logger;
+            _signInManager = signInManager;
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if(await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    var props = new AuthenticationProperties
+                    {
+                        
+                    };
+
+                    await _signInManager.SignInAsync(user, props);
+
+                    return Redirect("~/");
+                }
+
+                ModelState.AddModelError("", "Invalid username or password.");
+            }
+
+            return View(model);
         }
 
         [HttpGet]
@@ -41,7 +76,7 @@ namespace drDotnet.Services.Identity.API.Controllers
                     }
                 }
 
-                return Content("Successfully Registered");
+                return Redirect("~/");
             }
 
             return View(model);

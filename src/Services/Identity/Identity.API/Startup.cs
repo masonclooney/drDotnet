@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using drDotnet.Services.Identity.API.Configuration;
 using drDotnet.Services.Identity.API.Data;
+using drDotnet.Services.Identity.API.Helpers;
 using drDotnet.Services.Identity.API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,19 +30,17 @@ namespace drDotnet.Services.Identity.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
+            services.AddControllersWithViews();
 
-            services.AddIdentityServer()
-                .AddInMemoryIdentityResources(Config.Resources)
-                .AddInMemoryClients(Config.Clients);
+            RegisterDbContexts(services);
 
             services.AddIdentity<AppIdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddIdentityServer()
+                .AddInMemoryIdentityResources(Config.Resources)
+                .AddInMemoryClients(Config.Clients)
+                .AddAspNetIdentity<AppIdentityUser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +59,11 @@ namespace drDotnet.Services.Identity.API
             {
                 endpoints.MapDefaultControllerRoute();
             });
+        }
+
+        public virtual void RegisterDbContexts(IServiceCollection services)
+        {
+            services.RegisterDbContexts(Configuration);
         }
     }
 }
