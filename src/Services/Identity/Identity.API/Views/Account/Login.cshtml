@@ -1,6 +1,6 @@
 @model drDotnet.Services.Identity.API.Models.AccountViewModels.LoginViewModel
 
-<form asp-controller="Account" asp-action="Login" method="post">
+<form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
     <input asp-for="Email" />
     <input asp-for="Password" />
     <button type="submit">Login</button>

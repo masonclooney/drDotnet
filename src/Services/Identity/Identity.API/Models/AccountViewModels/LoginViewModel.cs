@@ -11,5 +11,7 @@ namespace drDotnet.Services.Identity.API.Models.AccountViewModels
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

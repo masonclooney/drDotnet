@@ -1,7 +1,10 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using drDotnet.Services.Identity.API.Models;
 using drDotnet.Services.Identity.API.Models.AccountViewModels;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,20 +16,30 @@ namespace drDotnet.Services.Identity.API.Controllers
     {
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly ILogger<AccountController> _logger;
-
         private readonly SignInManager<AppIdentityUser> _signInManager;
+        private readonly IIdentityServerInteractionService _interaction;
 
-        public AccountController(UserManager<AppIdentityUser> userManager, ILogger<AccountController> logger, SignInManager<AppIdentityUser> signInManager)
+        public AccountController(UserManager<AppIdentityUser> userManager, ILogger<AccountController> logger, SignInManager<AppIdentityUser> signInManager, IIdentityServerInteractionService interaction)
         {
             _userManager = userManager;
             _logger = logger;
             _signInManager = signInManager;
+            _interaction = interaction;
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            return View();
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+            if (context?.IdP != null)
+            {
+                throw new NotImplementedException("External login is not implmented!");
+            }
+
+            var vm = BuildLoginViewModel(returnUrl, context);
+            ViewData["ReturnUrl"] = returnUrl;
+
+            return View(vm);
         }
 
         [HttpPost]
@@ -40,10 +53,14 @@ namespace drDotnet.Services.Identity.API.Controllers
                 {
                     var props = new AuthenticationProperties
                     {
-                        
                     };
 
                     await _signInManager.SignInAsync(user, props);
+
+                    if (_interaction.IsValidReturnUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
 
                     return Redirect("~/");
                 }
@@ -51,7 +68,27 @@ namespace drDotnet.Services.Identity.API.Controllers
                 ModelState.AddModelError("", "Invalid username or password.");
             }
 
-            return View(model);
+            var vm = await BuildLoginViewModelAsync(model);
+            ViewData["ReturnUrl"] = model.ReturnUrl;
+
+            return View(vm);
+        }
+
+        private LoginViewModel BuildLoginViewModel(string returnUrl, AuthorizationRequest context)
+        {
+            return new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                Email = context?.LoginHint
+            };
+        }
+
+        private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginViewModel model)
+        {
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+            var vm = BuildLoginViewModel(model.ReturnUrl, context);
+            vm.Email = model.Email;
+            return vm;
         }
 
         [HttpGet]

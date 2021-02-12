@@ -37,10 +37,12 @@ namespace drDotnet.Services.Identity.API
             services.AddIdentity<AppIdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddIdentityServer()
+            var builder = services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.Resources)
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<AppIdentityUser>();
+
+            builder.AddDeveloperSigningCredential();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
