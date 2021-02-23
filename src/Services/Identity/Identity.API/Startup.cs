@@ -36,6 +36,8 @@ namespace drDotnet.Services.Identity.API
             var rootConfiguration = CreateRootConfiguration();
             services.AddSingleton(rootConfiguration);
 
+            services.AddOidcConfiguration();
+
             services.AddControllersWithViews();
 
             RegisterDbContexts(services);

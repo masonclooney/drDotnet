@@ -8,6 +8,12 @@ namespace drDotnet.Services.Identity.API.Helpers
 {
     public static class StartupHelpers
     {
+        public static void AddOidcConfiguration(this IServiceCollection services)
+        {
+            services.AddScoped<IClientRequestParametersProvider, DefaultClientRequestParametersProvider>();
+            services.AddSingleton<IAbsoluteUrlFactory, AbsoluteUrlFactory>();
+        }
+
         public static void RegisterDbContexts(this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddDbContext<AppDbContext>(optionBuilder => optionBuilder.UseSqlite(configuration.GetConnectionString("DefaultConnection")));

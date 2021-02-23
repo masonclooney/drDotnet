@@ -25,6 +25,8 @@ namespace drDotnet.Services.Identity.API.Configuration
                     RedirectUris = { "https://localhost:6001/callback.html" },
                     AllowedCorsOrigins = { "https://localhost:6001" },
 
+                    PostLogoutRedirectUris = { "https://localhost:6001/callback.html" },
+
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId
