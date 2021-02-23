@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using drDotnet.Services.Identity.API.Configuration;
+using drDotnet.Services.Identity.API.Configuration.Constants;
+using drDotnet.Services.Identity.API.Configuration.Root;
 using drDotnet.Services.Identity.API.Data;
 using drDotnet.Services.Identity.API.Helpers;
 using drDotnet.Services.Identity.API.Models;
@@ -30,6 +32,10 @@ namespace drDotnet.Services.Identity.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var rootConfiguration = CreateRootConfiguration();
+            services.AddSingleton(rootConfiguration);
+
             services.AddControllersWithViews();
 
             RegisterDbContexts(services);
@@ -66,6 +72,13 @@ namespace drDotnet.Services.Identity.API
         public virtual void RegisterDbContexts(IServiceCollection services)
         {
             services.RegisterDbContexts(Configuration);
+        }
+
+        protected IRootConfiguration CreateRootConfiguration()
+        {
+            var conf = new RootConfiguration();
+            Configuration.GetSection(ConfigurationConsts.RegisterConfigurationKey).Bind(conf.RegisterConfiguration);
+            return conf;
         }
     }
 }

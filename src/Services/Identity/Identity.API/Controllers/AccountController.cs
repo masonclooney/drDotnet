@@ -92,14 +92,29 @@ namespace drDotnet.Services.Identity.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Logout()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Logout(LogoutViewModel model)
         {
+            await _signInManager.SignOutAsync();
+            return Content("sign out");
+        }
+
+        [HttpGet]
+        public IActionResult Register(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 var user = new AppIdentityUser { Email = model.Email, UserName = model.Email };
@@ -112,11 +127,17 @@ namespace drDotnet.Services.Identity.API.Controllers
                         return View(model);
                     }
                 }
-
-                return Redirect("~/");
             }
 
-            return View(model);
+            if (returnUrl != null)
+            {
+                if (ModelState.IsValid)
+                    return RedirectToAction("login", "account", new { returnUrl = returnUrl });
+                else
+                    return View(model);
+            }
+
+            return RedirectToAction("index", "home");
         }
     }
 }

@@ -24,18 +24,14 @@ var config = {
 };
 var mgr = new Oidc.UserManager(config);
 
-let i = 0;
-setInterval(() => {
-    mgr.getUser().then(function (user) {
-        if (user) {
-            log("User logged in "+i, user.profile);
-            i++;
-        }
-        else {
-            log("User not logged in");
-        }
-    });
-}, 1000);
+mgr.getUser().then(function (user) {
+    if (user) {
+        log("User logged in ", user.profile);
+    }
+    else {
+        log("User not logged in");
+    }
+});
 
 function login() {
     mgr.signinRedirect();

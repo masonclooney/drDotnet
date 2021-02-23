@@ -1,4 +1,6 @@
+@using drDotnet.Services.Identity.API.Configuration.Root
 @model drDotnet.Services.Identity.API.Models.AccountViewModels.LoginViewModel
+@inject IRootConfiguration RootConfiguration
 
 <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
     <input asp-for="Email" />
@@ -7,3 +9,8 @@
 </form>
 
 <div asp-validation-summary="All"></div>
+
+@if (RootConfiguration.RegisterConfiguration.Enabled)
+{
+    <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" class="text">Register</a>
+}
