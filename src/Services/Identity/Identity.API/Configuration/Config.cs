@@ -22,10 +22,12 @@ namespace drDotnet.Services.Identity.API.Configuration
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,
 
-                    RedirectUris = { "https://localhost:6001/callback.html" },
+                    RedirectUris = { "https://localhost:6001/authentication/login-callback" },
                     AllowedCorsOrigins = { "https://localhost:6001" },
 
-                    PostLogoutRedirectUris = { "https://localhost:6001/callback.html" },
+                    
+
+                    PostLogoutRedirectUris = { "https://localhost:6001/logout-callback" },
 
                     AllowedScopes =
                     {

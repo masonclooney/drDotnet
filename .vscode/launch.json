@@ -9,7 +9,7 @@
            "type": "coreclr",
            "request": "launch",
            "preLaunchTask": "build",
-           "program": "${workspaceFolder}/src/Web/ReactSPA/bin/Debug/netcoreapp3.1/ReactSPA.dll",
+           "program": "${workspaceFolder}/src/Web/ReactSPA/bin/Debug/netcoreapp3.1/drDotnet.ReactSPA.dll",
            "args": [],
            "cwd": "${workspaceFolder}/src/Web/ReactSPA",
            "stopAtEntry": false,

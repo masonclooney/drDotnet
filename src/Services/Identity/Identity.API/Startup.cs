@@ -37,6 +37,7 @@ namespace drDotnet.Services.Identity.API
             services.AddSingleton(rootConfiguration);
 
             services.AddOidcConfiguration();
+            services.AddCorsService();
 
             services.AddControllersWithViews();
 
@@ -62,6 +63,8 @@ namespace drDotnet.Services.Identity.API
             }
 
             app.UseRouting();
+
+            app.UseCorsConfig();
 
             app.UseIdentityServer();
 

@@ -24,6 +24,8 @@ namespace drDotnet.Services.Identity.API.Helpers
             var authority = context.GetIdentityServerIssuerUri();
             var client = await _clientStore.FindClientByIdAsync(clientId);
 
+            if (client == null) return new Dictionary<string, string>();
+
             return new Dictionary<string, string>
             {
                 ["authority"] = authority,
