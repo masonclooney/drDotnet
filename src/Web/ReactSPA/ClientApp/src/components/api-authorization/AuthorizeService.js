@@ -23,6 +23,7 @@ export class AuthorizeService {
         }
 
         let settings = await response.json();
+        settings.automaticSilentRenew = true;
         this.userManager = new UserManager(settings);
     }
 
@@ -64,7 +65,7 @@ export class AuthorizeService {
     async completeSignIn(url) {
         try {
             console.log(url);
-            this.ensureUserManagerInitialized();
+            await this.ensureUserManagerInitialized();
             const user = await this.userManager.signinCallback(url);
             this.updateState(user);
             return this.success(user && user.state);

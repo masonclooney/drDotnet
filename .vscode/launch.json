@@ -47,6 +47,26 @@
             }
         },
         {
+            "name": "signalr Hub",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/Services/SignalrHub/bin/Debug/netcoreapp3.1/SignalrHub.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Services/SignalrHub",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach",
