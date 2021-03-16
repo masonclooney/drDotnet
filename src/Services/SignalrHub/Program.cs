@@ -10,7 +10,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace drDotnet.Services.Identity.API
+namespace drDotnet.Services.SignalrHub
 {
     public class Program
     {

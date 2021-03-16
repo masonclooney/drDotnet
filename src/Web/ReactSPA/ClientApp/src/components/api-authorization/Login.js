@@ -27,6 +27,7 @@ export class Login extends Component {
         const url = window.location.href;
         console.log(url);
         const result = await authService.completeSignIn(url);
+        console.log(result.status);
         switch(result.status) {
             case AuthenticationResultStatus.Redirect:
                 throw new Error('Should not redirect.');
@@ -41,7 +42,8 @@ export class Login extends Component {
     async login(returnUrl) {
         const state = { returnUrl };
         const result = await authService.signIn(state);
-        switch(result) {
+        console.log(result);
+        switch(result.status) {
             case AuthenticationResultStatus.Success:
                 window.location.replace(returnUrl);
                 break;
