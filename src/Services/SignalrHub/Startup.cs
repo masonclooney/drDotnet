@@ -21,6 +21,7 @@ namespace drDotnet.Services.SignalrHub
 {
     public class Startup
     {
+        private readonly string _MyAllowedOrigins = "_myAllowedOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -65,6 +66,14 @@ namespace drDotnet.Services.SignalrHub
 
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
             services.AddSignalR();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _MyAllowedOrigins, builder =>
+                {
+                    builder.WithOrigins("https://localhost:6001").AllowAnyHeader().WithMethods("GET", "POST").AllowCredentials();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,6 +94,8 @@ namespace drDotnet.Services.SignalrHub
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(_MyAllowedOrigins);
 
             app.UseAuthentication();
             app.UseAuthorization();

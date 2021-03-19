@@ -12,5 +12,10 @@ namespace drDotnet.Services.SignalrHub.Hubs
         {
             await Clients.All.SendAsync("ReceiveMessage", Context.UserIdentifier, message);
         }
+
+        public async Task Update(string id, string msg)
+        {
+            await Clients.User(id).SendAsync("update", msg);
+        }
     }
 }
