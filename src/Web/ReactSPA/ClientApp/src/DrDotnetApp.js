@@ -2,6 +2,8 @@ import React from 'react';
 import { Component } from "react";
 import * as signalR from '@microsoft/signalr';
 import authService from './components/api-authorization/AuthorizeService';
+import ConController from './Controllers/Connection/ConController';
+import './DrDotnetApp.css';
 
 class DrDotnetApp extends Component {
     constructor(props) {
@@ -12,7 +14,7 @@ class DrDotnetApp extends Component {
             msg: ""
         }
 
-        this.connection = null;
+        ConController.init();
     }
 
     changeId(id) {
@@ -30,22 +32,15 @@ class DrDotnetApp extends Component {
     }
 
     componentDidMount() {
-        var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:8001/chatHub", {
-            accessTokenFactory: async () => {
-                return await authService.getAccessToken();
-            }
-        }).build();
+        ConController.on('update', this.onUpdate);
+    }
 
-        connection.on("update", function(msg) {
-            console.log(msg);
-        });
+    componentWillUnmount() {
+        ConController.off('update', this.onUpdate);
+    }
 
-        connection.start().then(() => {
-            console.log('started');
-            this.connection = connection;
-        }).catch(function (err) {
-            return console.error(err.toString());
-        });
+    onUpdate = update => {
+        console.log(update);
     }
 
     render() {
@@ -54,8 +49,11 @@ class DrDotnetApp extends Component {
                 <input type="text" onChange={e => this.changeId(e.target.value)} />
                 <input type="text" onChange={e => this.changeMsg(e.target.value)} />
                 <button onClick={() => {
-                    this.connection.invoke("update", this.state.id, this.state.msg);
-                }}>send</button>
+                    ConController.send("CreateContact");
+                }}>create contact</button>
+                <button onClick={() => {
+                    ConController.send("GetContacts");
+                }}>get contact list</button>
             </div>
         );
     }

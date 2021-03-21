@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "drDotnet.Services.SignalrHub";
+
+package contact;
+
+service Contact {
+  rpc CreateContact (ContactRequest) returns (ContactReply);
+  rpc GetContacts (ContactRequest) returns (stream ContactRequest);
+}
+
+message ContactRequest  {
+  string name = 1;
+  string email = 2;
+  string id = 3;
+}
+
+message ContactReply {
+  string message = 1;
+}
