@@ -1,0 +1,7 @@
+.header-master {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 0;
+}

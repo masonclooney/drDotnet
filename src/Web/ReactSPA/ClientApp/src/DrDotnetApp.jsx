@@ -11,6 +11,7 @@ import Dialog from './components/Tile/Dialog';
 import MainPage from './components/MainPage';
 import withDrDotnetTheme from './Theme';
 import { compose } from './Utils/HOC';
+import SearchInput from './components/ColumnLeft/Search/SearchInput';
 
 class DrDotnetApp extends Component {
     constructor(props) {

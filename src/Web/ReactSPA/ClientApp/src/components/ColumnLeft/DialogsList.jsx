@@ -23,9 +23,9 @@ class DialogsList extends Component {
     }
 
   renderItem = ({ index, style }, source) => {
-    // return <DialogListItem style={style} />
 
     return <DialogListItem key={index} style={style} />
+    // return <div style={style}>{index}</div>;
   };
 
   render() {
