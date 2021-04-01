@@ -1,0 +1,17 @@
+.dialog-title-span {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dialog-title {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    color: var(--dialog-color);
+}

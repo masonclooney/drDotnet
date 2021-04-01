@@ -1,0 +1,14 @@
+.dialogs-list-item {
+    margin: 2px 0;
+}
+
+.dialogs-list {
+    background: var(--panel-background);
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+    height: 100%;
+    transform: translateZ(0);
+    will-change: transform;
+    padding: 4px 8px 8px;
+}

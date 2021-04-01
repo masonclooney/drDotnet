@@ -7,6 +7,7 @@ import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import DrDotnetApp from './DrDotnetApp';
 import Home from './Home';
 import registerServiceWorker from './registerServiceWorker';
+import './index.css'
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
