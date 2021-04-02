@@ -14,22 +14,22 @@ class Navigation extends Component {
     return (
       <div className="navigation">
 
-        <IconButton color="primary" aria-label="add to shopping cart">
+        <IconButton className="nav-item" style={{ color: 'rgba(255, 255, 255)' }} aria-label="add to shopping cart">
           <SendIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add to shopping cart">
+        <IconButton className="nav-item" aria-label="add to shopping cart">
           <WhatsAppIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add to shopping cart">
+        <IconButton className="nav-item" aria-label="add to shopping cart">
           <GroupWorkIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add to shopping cart">
+        <IconButton className="nav-item" aria-label="add to shopping cart">
           <SecurityIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add to shopping cart">
+        <IconButton className="nav-item" aria-label="add to shopping cart">
           <TimerIcon />
         </IconButton>
-        <IconButton color="primary" aria-label="add to shopping cart">
+        <IconButton className="nav-item" aria-label="add to shopping cart">
           <SettingsIcon />
         </IconButton>
       </div>

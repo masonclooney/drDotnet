@@ -7,6 +7,15 @@ class ConController extends EventEmitter {
         super();
 
         this.disableLog = true;
+        this.connected = false;
+    }
+
+    handleRreconnected = () => {
+        this.connected = true;
+    }
+
+    handleReconnecting = () => {
+        this.connected = false;
     }
 
     init = () => {
@@ -14,7 +23,10 @@ class ConController extends EventEmitter {
             accessTokenFactory: async () => {
                 return await authService.getAccessToken();
             }
-        }).build();
+        }).withAutomaticReconnect().build();
+
+        this.connection.onreconnected(this.handleRreconnected);
+        this.connection.onreconnecting(this.handleReconnecting);
 
         this.connection.on('update', update => {
             if (!this.disableLog) {
@@ -23,12 +35,13 @@ class ConController extends EventEmitter {
             this.emit('update', update);
         });
 
-        this.connection.on('ContactCreated', obj => {
-            console.log(obj);
-        });
+        // this.connection.on('ContactCreated', obj => {
+        //     console.log(obj);
+        // });
 
         this.connection.start().then(() => {
             console.log('connection controller started');
+            this.connected = true;
         }).catch(function (err) {
             return console.error(err.toString());
         });
@@ -54,6 +67,10 @@ class ConController extends EventEmitter {
 
             this.connection.invoke("CreateContact").catch(err => console.error(err));
         }
+    }
+
+    getStream = stream => {
+        return this.connection.stream(stream);
     }
 }
 

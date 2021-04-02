@@ -29,7 +29,6 @@ export default class AuthorizeRoute extends Component {
         link.href = this.props.path;
         const returnUrl = `${link.protocol}//${link.host}${link.pathname}${link.search}${link.hash}`;
         const redirectUrl = `/authentication/login?returnUrl=${encodeURI(returnUrl)}`;
-        console.log(redirectUrl);
 
         if (!ready) {
             return <div>wait...</div>

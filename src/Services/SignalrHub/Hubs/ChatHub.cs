@@ -35,7 +35,7 @@ namespace drDotnet.Services.SignalrHub.Hubs
             await Clients.Caller.SendAsync("ContactCreated", reply);
         }
 
-        public async IAsyncEnumerable<ContactRequest> GetContacts()
+        public async IAsyncEnumerable<ContactRequest> GetContactStream()
         {
              using var channel = GrpcChannel.ForAddress("https://localhost:9001");
             var client = new Contact.ContactClient(channel);

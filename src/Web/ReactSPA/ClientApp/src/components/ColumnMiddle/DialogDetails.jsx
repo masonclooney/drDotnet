@@ -3,7 +3,7 @@ import "./DialogDetails.css";
 
 class DialogDetails extends Component {
     render() {
-        return <div className="dialog-details">dialog-details</div>
+        return <div className="dialog-details"></div>
     }
 }
 

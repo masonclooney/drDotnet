@@ -1,25 +1,54 @@
-import React, { Component } from 'react';
-import ScrollableTabsButtonPrevent from '../temp/TabPanel';
+import React, { Component } from "react";
+import ScrollableTabsButtonPrevent, { TabPanel } from "../temp/TabPanel";
+import Contacts from "./Contacts";
+import ContactsHeader from "./ContactsHeader";
 import "./Dialogs.css";
-import DialogsHeader from './DialogsHeader';
-import DialogsList from './DialogsList';
+import DialogsHeader from "./DialogsHeader";
+import DialogsList from "./DialogsList";
 
 class Dialogs extends Component {
-    render () {
-        return <div className="dialogs">
-            <div className="sidebar-page">
-                <ScrollableTabsButtonPrevent />
+  constructor(props) {
+    super(props);
 
-                <DialogsHeader />
+    this.state = {
+      value: 0,
+    };
+  }
 
-                <div className="dialogs-content">
-                    <div className="dialogs-content-internal">
-                        <DialogsList />
-                    </div>
+  handleChangeValue = (value) => {
+    this.setState({ value });
+  };
+
+  render() {
+    const { value } = this.state;
+    return (
+      <div className="dialogs">
+        <div className="sidebar-page">
+          <ScrollableTabsButtonPrevent
+            value={value}
+            setValue={this.handleChangeValue}
+          >
+            <TabPanel value={value} index={0}>
+              <DialogsHeader />
+              <div className="dialogs-content">
+                <div className="dialogs-content-internal">
+                  <DialogsList />
                 </div>
-            </div>
+              </div>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                <ContactsHeader />
+              <div className="dialogs-content">
+                <div className="dialogs-content-internal">
+                  <Contacts />
+                </div>
+              </div>
+            </TabPanel>
+          </ScrollableTabsButtonPrevent>
         </div>
-    }
+      </div>
+    );
+  }
 }
 
 export default Dialogs;

@@ -1,0 +1,17 @@
+.user-content {
+    font-size: 14px;
+    line-height: normal;
+}
+
+.user-status-accent {
+    color: var(--color-accent-dark);
+}
+
+.dialog-content {
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    color: var(--dialog-subtle-color);
+}

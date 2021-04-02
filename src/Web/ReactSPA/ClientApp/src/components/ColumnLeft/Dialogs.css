@@ -1,6 +1,6 @@
 .dialogs {
-    max-width: 25%;
-    flex: 1 1 25%;
+    max-width: 25.5%;
+    flex: 1 1 25.5%;
     margin: 0;
     box-sizing: border-box;
     border-right: 1px solid var(--border);
@@ -30,6 +30,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     position: relative;
+    height: 100%;
 }
 
 .dialogs-content-internal {
