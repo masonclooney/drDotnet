@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using drDotnet.Services.SignalrHub.Constants;
+using drDotnet.Services.SignalrHub.MessageObjects;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Authorization;
@@ -16,9 +18,15 @@ namespace drDotnet.Services.SignalrHub.Hubs
             await Clients.All.SendAsync("ReceiveMessage", Context.UserIdentifier, message);
         }
 
-        public async Task Update(string id, string msg)
+        public async Task Update(MessageObjectBase data)
         {
-            await Clients.User(id).SendAsync("update", msg);
+            switch (data.Type)
+            {
+                case MessageDataType.GetContacts:
+                    break;
+                default:
+                    break;
+            }
         }
 
         public async Task CreateContact()
