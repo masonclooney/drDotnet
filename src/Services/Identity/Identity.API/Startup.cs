@@ -43,7 +43,7 @@ namespace drDotnet.Services.Identity.API
 
             RegisterDbContexts(services);
 
-            services.AddIdentity<AppIdentityUser, IdentityRole>()
+            services.AddIdentity<AppIdentityUser, IdentityRole<long>>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
             var builder = services.AddIdentityServer()
