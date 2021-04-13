@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace drDotnet.Services.Member.API
+namespace drDotnet.Services.Contact.API
 {
     public class Program
     {

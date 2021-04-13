@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using drDotnet.Services.Member.API.Infrastructure;
+using drDotnet.Services.Contact.API.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,7 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-namespace drDotnet.Services.Member.API
+namespace drDotnet.Services.Contact.API
 {
     public class Startup
     {
@@ -38,7 +38,7 @@ namespace drDotnet.Services.Member.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var pathBase = Configuration["PATH_BASE"];
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -62,6 +62,7 @@ namespace drDotnet.Services.Member.API
             });
         }
     }
+
     public static class CustomExtensionMethods
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services)
@@ -70,9 +71,9 @@ namespace drDotnet.Services.Member.API
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "drDotnet - Member HTTP API",
+                    Title = "drDotnet - Contact HTTP API",
                     Version = "v1",
-                    Description = "The Member Microservice HTTP API. This is a Data-Driven/CRUD microservice sample"
+                    Description = "The Contact Microservice HTTP API. This is a Data-Driven/CRUD microservice sample"
                 });
             });
 
@@ -82,7 +83,7 @@ namespace drDotnet.Services.Member.API
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEntityFrameworkSqlServer()
-                .AddDbContext<MemberContext>(options =>
+                .AddDbContext<ContactContext>(options =>
                 {
                     options.UseSqlServer(configuration["ConnectionString"],
                                         sqlServerOptionsAction: sqlOptions =>

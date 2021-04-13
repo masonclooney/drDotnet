@@ -1,10 +1,9 @@
-namespace drDotnet.Services.Member.API.Model
+namespace drDotnet.Services.Contact.API.Model
 {
     public class User
     {
         public long Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Sub { get; set; }
     }
 }

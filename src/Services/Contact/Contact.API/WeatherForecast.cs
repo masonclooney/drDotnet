@@ -1,6 +1,6 @@
 using System;
 
-namespace drDotnet.Services.Member.API
+namespace drDotnet.Services.Contact.API
 {
     public class WeatherForecast
     {

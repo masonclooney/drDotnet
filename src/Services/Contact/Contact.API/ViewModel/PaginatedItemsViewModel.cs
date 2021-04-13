@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace drDotnet.Services.Member.API.ViewModel
+namespace drDotnet.Services.Contact.API.ViewModel
 {
     public class PaginatedItemsViewModel<TEntity> where TEntity : class
     {

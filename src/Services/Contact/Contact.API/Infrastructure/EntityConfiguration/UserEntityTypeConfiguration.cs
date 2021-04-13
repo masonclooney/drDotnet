@@ -1,8 +1,8 @@
-using drDotnet.Services.Member.API.Model;
+using drDotnet.Services.Contact.API.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace drDotnet.Services.Member.API.Infrastructure.EntityConfigurations
+namespace drDotnet.Services.Contact.API.Infrastructure.EntityConfiguration
 {
     public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
@@ -17,18 +17,12 @@ namespace drDotnet.Services.Member.API.Infrastructure.EntityConfigurations
                 .IsRequired();
 
             builder.Property(u => u.Name)
-                .IsRequired(true)
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+                .IsRequired();
 
             builder.Property(u => u.Email)
-                .IsRequired(true)
-                .HasMaxLength(50);
-
-            builder.Property(u => u.Sub)
-                .IsRequired(true);
-            
-            builder.HasIndex(u => u.Sub)
-                .IsUnique();
+                .HasMaxLength(50)
+                .IsRequired();
 
             builder.HasIndex(u => u.Email)
                 .IsUnique();
