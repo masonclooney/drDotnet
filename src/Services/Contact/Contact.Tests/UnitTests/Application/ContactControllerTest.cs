@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using drDotnet.Services.Contact.API.Controllers;
 using drDotnet.Services.Contact.API.Infrastructure;
+using drDotnet.Services.Contact.API.Model;
 using drDotnet.Services.Contact.API.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -30,6 +33,87 @@ namespace drDotnet.Services.Contact.UnitTests.Application
         }
 
         [Fact]
+        public async Task Delete_contact_nocontent()
+        {
+            // Arrange
+            var contactContext = new ContactContext(_dbOptions);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
+
+            // Act
+            var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            var actionResult = await contactController.DeleteContactAsync(2);
+
+            // Assert
+            Assert.IsType<NoContentResult>(actionResult);
+        }
+
+        [Fact]
+        public async Task Delete_contact_notfound()
+        {
+            // Arrange
+            var contactContext = new ContactContext(_dbOptions);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
+
+            // Act
+            var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            var actionResult = await contactController.DeleteContactAsync(4);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(actionResult);
+        }
+
+        [Fact]
+        public async Task Get_contacts_success()
+        {
+            // Arrange
+            var pageSize = 4;
+            var pageIndex = 0;
+
+            var expectedItemsInPage = 2;
+            var expectedTotalItems = 2;
+
+            var contactContext = new ContactContext(_dbOptions);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
+
+            // Act
+            var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            var actionResult = await contactController.ItemsAsync(pageSize, pageIndex);
+
+            // Assert
+            Assert.IsType<ActionResult<PaginatedItemsViewModel<User>>>(actionResult);
+            var page = Assert.IsAssignableFrom<PaginatedItemsViewModel<User>>(actionResult.Value);
+            Assert.Equal(expectedTotalItems, page.Count);
+            Assert.Equal(pageIndex, page.PageIndex);
+            Assert.Equal(pageSize, page.PageSize);
+            Assert.Equal(expectedItemsInPage, page.Data.Count());
+        }
+
+
+        [Fact]
         public async Task Create_contact_success()
         {
             // Arrange
@@ -39,9 +123,17 @@ namespace drDotnet.Services.Contact.UnitTests.Application
                 Name = "safari",
                 Email = "mohsen@gmail.com"
             };
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
 
             // Act
             var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
             var actionResult = await contactController.CreateContactAsync(contact);
 
             //Assert
@@ -62,9 +154,17 @@ namespace drDotnet.Services.Contact.UnitTests.Application
                 Name = "lida afshari",
                 Email = "lida@gmail.com"
             };
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
 
             // Act
             var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
             var actionResult = await contactController.CreateContactAsync(contact);
 
             //Assert
@@ -85,9 +185,17 @@ namespace drDotnet.Services.Contact.UnitTests.Application
                 Name = "hossein naser",
                 Email = "hosein@gmail.com"
             };
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
 
             // Act
             var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
             var actionResult = await contactController.CreateContactAsync(contact);
 
             //Assert

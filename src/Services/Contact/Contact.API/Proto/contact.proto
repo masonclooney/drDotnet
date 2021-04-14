@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package ContactApi;
+
+message ContactItemRequest {
+    int64 id = 1;
+}
+
+message ContactItemsRequest {
+    int32 pageSize = 1;
+    int32 pageIndex = 2;
+}
+
+message ContactItemResponse {
+    int64 id = 1;
+    string email = 2;
+    string name = 3;
+}
+
+message PaginatedContactResponse {
+    int32 pageSize = 1;
+    int32 pageIndex = 2;
+    int64 count = 3;
+    repeated ContactItemResponse data = 4;
+}
+
+message ContactCreateRequest {
+    string email = 1;
+    string name = 2;
+}
+
+message ContactCreateResponse {
+    string name = 1;
+    int64 userId = 2;
+    int64 ownerId = 3;
+}
+
+message Response {
+    
+}
+
+service Contact {
+    rpc GetContacts (ContactItemsRequest) returns (PaginatedContactResponse);
+    rpc CreateContact (ContactCreateRequest) returns (ContactCreateResponse);
+    rpc DeleteContact (ContactItemRequest) returns (Response);
+}
