@@ -43,4 +43,5 @@ service Contact {
     rpc GetContacts (ContactItemsRequest) returns (PaginatedContactResponse);
     rpc CreateContact (ContactCreateRequest) returns (ContactCreateResponse);
     rpc DeleteContact (ContactItemRequest) returns (Response);
+    rpc GetContact (ContactItemRequest) returns (ContactItemResponse);
 }

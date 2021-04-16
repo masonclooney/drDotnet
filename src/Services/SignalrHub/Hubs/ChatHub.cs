@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ContactApi;
 using drDotnet.Services.SignalrHub.Constants;
+using drDotnet.Services.SignalrHub.Handler;
 using drDotnet.Services.SignalrHub.MessageObjects;
+using drDotnet.Services.SignalrHub.MessageObjects.Contact;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Authorization;
@@ -13,50 +17,22 @@ namespace drDotnet.Services.SignalrHub.Hubs
     [Authorize]
     public class ChatHub : Hub
     {
-        public async Task SendMessage(string user, string message)
+        private readonly Contact.ContactClient _contactClient;
+
+        public ChatHub(Contact.ContactClient contactClient)
         {
-            await Clients.All.SendAsync("ReceiveMessage", Context.UserIdentifier, message);
+            _contactClient = contactClient;
         }
 
-        public async Task Update(MessageObjectBase data)
+        public async Task Update(MessageObjectBase msg)
         {
-            switch (data.Type)
+            switch (msg.Type)
             {
                 case MessageDataType.GetContacts:
+                    await new ContactHandler(Clients, Context, _contactClient).GetContacts(msg.Data);
                     break;
                 default:
                     break;
-            }
-        }
-
-        public async Task CreateContact()
-        {
-            using var channel = GrpcChannel.ForAddress("https://localhost:9001");
-            var client = new Contact.ContactClient(channel);
-            var reply = await client.CreateContactAsync(new ContactRequest
-            {
-                Email = "asdf@gmail.com",
-                Name = "meys",
-                Id = "4ac1ec1f-5329-4bab-8e7b-7de4aa830d6f"
-            });
-
-            await Clients.Caller.SendAsync("ContactCreated", reply);
-        }
-
-        public async IAsyncEnumerable<ContactRequest> GetContactStream()
-        {
-             using var channel = GrpcChannel.ForAddress("https://localhost:9001");
-            var client = new Contact.ContactClient(channel);
-            var reply = client.GetContacts(new ContactRequest
-            {
-                Email = "asdf@gmail.com",
-                Name = "meys",
-                Id = "4ac1ec1f-5329-4bab-8e7b-7de4aa830d6f"
-            });
-
-            while (await reply.ResponseStream.MoveNext())
-            {
-                yield return reply.ResponseStream.Current;
             }
         }
     }

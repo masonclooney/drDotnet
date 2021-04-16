@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using drDotnet.Services.Contact.API.Grpc;
 using drDotnet.Services.Contact.API.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace drDotnet.Services.Contact.API
@@ -30,8 +34,10 @@ namespace drDotnet.Services.Contact.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddGrpc();
             services.AddSwagger()
-                .AddCustomDbContext(Configuration);
+                .AddCustomDbContext(Configuration)
+                .ConfigureAuthService(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,11 +60,13 @@ namespace drDotnet.Services.Contact.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<ContactService>();
             });
         }
     }
@@ -75,6 +83,25 @@ namespace drDotnet.Services.Contact.API
                     Version = "v1",
                     Description = "The Contact Microservice HTTP API. This is a Data-Driven/CRUD microservice sample"
                 });
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureAuthService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://localhost:5001";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    NameClaimType = ClaimTypes.NameIdentifier,
+                };
             });
 
             return services;

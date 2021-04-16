@@ -33,6 +33,54 @@ namespace drDotnet.Services.Contact.UnitTests.Application
         }
 
         [Fact]
+        public async Task Get_contact_by_id_success()
+        {
+            // Arrange
+            var contactContext = new ContactContext(_dbOptions);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
+
+            // Act
+            var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            var actionResult = await contactController.ItemByIdAsync(3);
+
+            // Assert
+            var result = Assert.IsType<OkObjectResult>(actionResult);
+            var data = Assert.IsAssignableFrom<User>(result.Value);
+            Assert.Equal("lida", data.Name);
+        }
+
+        [Fact]
+        public async Task Get_contact_by_id_notfound()
+        {
+            // Arrange
+            var contactContext = new ContactContext(_dbOptions);
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, "1")
+            }, "mock"));
+
+            // Act
+            var contactController = new ContactController(contactContext);
+            contactController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            var actionResult = await contactController.ItemByIdAsync(4);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(actionResult);
+        }
+
+        [Fact]
         public async Task Delete_contact_nocontent()
         {
             // Arrange

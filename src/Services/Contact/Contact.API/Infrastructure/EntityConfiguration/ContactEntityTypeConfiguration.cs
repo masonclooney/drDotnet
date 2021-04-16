@@ -14,6 +14,16 @@ namespace drDotnet.Services.Contact.API.Infrastructure.EntityConfiguration
             builder.Property(c => c.Name)
                 .HasMaxLength(50)
                 .IsRequired();
+
+            builder.HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            builder.HasOne(c => c.Owner)
+                .WithMany()
+                .HasForeignKey(c => c.OwnerId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

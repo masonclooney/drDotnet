@@ -39,14 +39,7 @@ class Contacts extends Component {
             setTimeout(() => this.loadContent(), 1000);
             return;
         }
-        ConController.getStream(CONTACT_STREAM).subscribe({
-            next: (item) => {
-                console.log(item);
-            },
-            complete: () => {
-                console.log('finished');
-            }
-        });
+        ConController.send({ type: "getContacts", data: JSON.stringify({ pageSize: 10, pageIndex: 0 }) });
     }
 
     renderItem = ({ index, style }, source) => {

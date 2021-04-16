@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ContactApi;
 using drDotnet.Services.SignalrHub.Configuration;
 using drDotnet.Services.SignalrHub.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,6 +65,8 @@ namespace drDotnet.Services.SignalrHub
                 };
             });
 
+            services.AddGrpcServices();
+
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
             services.AddSignalR();
 
@@ -106,6 +109,19 @@ namespace drDotnet.Services.SignalrHub
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/chathub");
             });
+        }
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddGrpcServices(this IServiceCollection services)
+        {
+            services.AddGrpcClient<Contact.ContactClient>(o =>
+            {
+                o.Address = new Uri("https://localhost:7001");
+            });
+
+            return services;
         }
     }
 }

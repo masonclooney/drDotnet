@@ -27,7 +27,8 @@ namespace drDotnet.Services.Contact.API.Controllers
             contactContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult> DeleteContactAsync(long id)
@@ -96,6 +97,23 @@ namespace drDotnet.Services.Contact.API.Controllers
             await _contactContext.SaveChangesAsync();
 
             return Created("", contact);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult> ItemByIdAsync(long id)
+        {   
+            var ownerId = Int64.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var contact = await _contactContext.Contacts
+                .Where(c => c.OwnerId == ownerId && c.UserId == id)
+                .Select(c => c.User).SingleOrDefaultAsync();
+
+            if (contact == null) return NotFound();
+
+            return Ok(contact);
         }
 
     }
