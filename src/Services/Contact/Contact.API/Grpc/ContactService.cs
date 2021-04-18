@@ -18,7 +18,7 @@ namespace drDotnet.Services.Contact.API.Grpc
         private readonly ContactContext _contactContext;
         private readonly ILogger _logger;
 
-        public ContactService(ContactContext contactContext, ILogger logger)
+        public ContactService(ContactContext contactContext, ILogger<ContactService> logger)
         {
             _contactContext = contactContext ?? throw new ArgumentNullException(nameof(contactContext));
             _logger = logger;

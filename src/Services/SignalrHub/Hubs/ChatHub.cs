@@ -11,6 +11,7 @@ using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace drDotnet.Services.SignalrHub.Hubs
 {
@@ -18,10 +19,12 @@ namespace drDotnet.Services.SignalrHub.Hubs
     public class ChatHub : Hub
     {
         private readonly Contact.ContactClient _contactClient;
+        private readonly ILogger _logger;
 
-        public ChatHub(Contact.ContactClient contactClient)
+        public ChatHub(Contact.ContactClient contactClient, ILogger<ChatHub> logger)
         {
             _contactClient = contactClient;
+            _logger = logger;
         }
 
         public async Task Update(MessageObjectBase msg)

@@ -8,6 +8,7 @@ using drDotnet.Services.SignalrHub.Constants;
 using drDotnet.Services.SignalrHub.MessageObjects;
 using drDotnet.Services.SignalrHub.MessageObjects.Contact;
 using drDotnet.Services.SignalrHub.MessageObjects.User;
+using Grpc.Core;
 using Microsoft.AspNetCore.SignalR;
 
 namespace drDotnet.Services.SignalrHub.Handler
@@ -33,7 +34,11 @@ namespace drDotnet.Services.SignalrHub.Handler
             
             var request = new ContactItemsRequest { PageIndex = data.PageIndex, PageSize = data.PageSize };
 
-            var result = await _contactClient.GetContactsAsync(request);
+            var accessToken = Context.GetHttpContext().Request.Query["access_token"];
+            var headers = new Metadata();
+            headers.Add("Authorization", $"Bearer {accessToken}");
+
+            var result = await _contactClient.GetContactsAsync(request, headers);
             List<long> userIds = new List<long>();
 
             foreach(var contact in result.Data)
