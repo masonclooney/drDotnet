@@ -31,8 +31,7 @@ namespace drDotnet.Services.SignalrHub.Handler
         public async Task GetContacts(string msg)
         {
             var data = JsonSerializer.Deserialize<GetContactsMsgObj>(msg);
-            
-            var request = new ContactItemsRequest { PageIndex = data.PageIndex, PageSize = data.PageSize };
+            var request = CreateContactItemsRequest(data);
 
             var accessToken = Context.GetHttpContext().Request.Query["access_token"];
             var headers = new Metadata();
@@ -40,23 +39,35 @@ namespace drDotnet.Services.SignalrHub.Handler
 
             var result = await _contactClient.GetContactsAsync(request, headers);
             List<long> userIds = new List<long>();
-
+            
             foreach(var contact in result.Data)
             {
                 userIds.Add(contact.Id);
                 var user = MapToUpdateUser(contact);
-                await Clients.Caller.SendAsync("update", user);
+                await SendBack(MakeObjBase(MessageDataType.UpdateUser, user));
             }
 
             var updateContact = MapToUpdateContact(userIds, result);
+            await SendBack(MakeObjBase(MessageDataType.UpdateContact, updateContact));
+        }
 
-            var sendData = new MessageObjectBase
+        private ContactItemsRequest CreateContactItemsRequest(GetContactsMsgObj data)
+        {
+            return new ContactItemsRequest { PageIndex = data.PageIndex, PageSize = data.PageSize };
+        }
+
+        private MessageObjectBase MakeObjBase(string type, object data)
+        {
+            return new MessageObjectBase
             {
-                Type = MessageDataType.UpdateContact,
-                Data = JsonSerializer.Serialize(updateContact)
+                Type = type,
+                Data = JsonSerializer.Serialize(data)
             };
+        }
 
-            await Clients.Caller.SendAsync("update", sendData);
+        private async Task SendBack(MessageObjectBase data)
+        {
+            await Clients.Caller.SendAsync("update", data);
         }
 
         private UpdateContact MapToUpdateContact(List<long> ids, PaginatedContactResponse con)

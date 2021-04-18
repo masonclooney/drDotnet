@@ -39,7 +39,7 @@ class Contacts extends Component {
             setTimeout(() => this.loadContent(), 1000);
             return;
         }
-        ConController.send({ type: "getContacts", data: JSON.stringify({ pageSize: 10, pageIndex: 0 }) });
+        ConController.send({ type: "getContacts", data: JSON.stringify({ PageSize: 10, PageIndex: 0 }) });
     }
 
     renderItem = ({ index, style }, source) => {

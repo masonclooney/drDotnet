@@ -12,6 +12,7 @@ import MainPage from './components/MainPage';
 import withDrDotnetTheme from './Theme';
 import { compose } from './Utils/HOC';
 import SearchInput from './components/ColumnLeft/Search/SearchInput';
+import UserStore from './Stores/UserStore';
 
 class DrDotnetApp extends Component {
     constructor(props) {
@@ -48,7 +49,7 @@ class DrDotnetApp extends Component {
     }
 
     onUpdate = update => {
-        console.log(update);
+        
     }
 
     render() {
