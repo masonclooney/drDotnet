@@ -6,7 +6,7 @@ class ConController extends EventEmitter {
     constructor() {
         super();
 
-        this.disableLog = true;
+        this.disableLog = false;
         this.connected = false;
     }
 
@@ -32,6 +32,7 @@ class ConController extends EventEmitter {
             if (!this.disableLog) {
                 console.log('receive update', update);
             }
+            update.data = JSON.parse(update.data);
             this.emit('update', update);
         });
 

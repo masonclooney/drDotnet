@@ -5,17 +5,37 @@ class UserStore extends EventEmitter {
     constructor() {
         super();
 
+        this.reset();
+
         this.addConListener();
     }
 
+    reset = () => {
+        this.items = new Map();
+    }
+
     onUpdate = update => {
+
         switch(update["type"]) {
             case 'updateUser':
-                console.log(update);
+                this.set(update.data);
+
+                this.emmit(update['type'], update);
+                break;
+            case 'updateContact':
+                this.emit(update['type'], update);
                 break;
             default:
                 break;
         }
+    }
+
+    get(userId) {
+        return this.items.get(userId);
+    }
+
+    set(user) {
+        this.items.set(user.id, user);
     }
 
     addConListener = () => {
