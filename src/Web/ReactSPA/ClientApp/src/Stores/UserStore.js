@@ -5,6 +5,8 @@ class UserStore extends EventEmitter {
     constructor() {
         super();
 
+        console.log('user store init');
+
         this.reset();
 
         this.addConListener();
@@ -35,7 +37,7 @@ class UserStore extends EventEmitter {
     }
 
     set(user) {
-        this.items.set(user.id, user);
+        this.items.set(user.Id, user);
     }
 
     addConListener = () => {
