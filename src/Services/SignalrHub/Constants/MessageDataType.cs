@@ -5,6 +5,7 @@ namespace drDotnet.Services.SignalrHub.Constants
         public const string GetContacts = "getContacts";
         public const string UpdateContact = "updateContact";
         public const string UpdateUser = "updateUser";
-        public const string ContactsUsers = "contactUsers";
+        public const string CreateContact = "createContact";
+        public const string updateCreateContact = "updateCreateContact";
     }
 }

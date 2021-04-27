@@ -44,6 +44,14 @@ class ConController extends EventEmitter {
         });
     }
 
+    clientUpdate = update => {
+        if (!this.disableLog) {
+            console.log('clientUpdate', update);
+        }
+
+        this.emit('clientUpdate', update);
+    };
+
     send = msg => {
         if (!this.connection) {
             console.log('connection controller not ready');

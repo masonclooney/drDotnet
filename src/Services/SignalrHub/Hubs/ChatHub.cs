@@ -34,6 +34,9 @@ namespace drDotnet.Services.SignalrHub.Hubs
                 case MessageDataType.GetContacts:
                     await new ContactHandler(Clients, Context, _contactClient).GetContacts(msg.Data);
                     break;
+                case MessageDataType.CreateContact:
+                    await new ContactHandler(Clients, Context, _contactClient).CreateContact(msg.Data);
+                    break;
                 default:
                     break;
             }

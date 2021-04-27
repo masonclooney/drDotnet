@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import ScrollableTabsButtonPrevent, { TabPanel } from "../temp/TabPanel";
 import Contacts from "./Contacts";
 import ContactsHeader from "./ContactsHeader";
+import CreateContact from "./CreateContact";
 import "./Dialogs.css";
 import DialogsHeader from "./DialogsHeader";
 import DialogsList from "./DialogsList";
+import UserStore from '../../Stores/UserStore';
 
 class Dialogs extends Component {
   constructor(props) {
@@ -12,12 +14,27 @@ class Dialogs extends Component {
 
     this.state = {
       value: 0,
+      openCreateContact: false
     };
   }
 
   handleChangeValue = (value) => {
     this.setState({ value });
   };
+
+  componentDidMount() {
+    UserStore.on('clientUpdateAddContactOpen', this.onClientUpdateAddContactOpen);
+  }
+
+  componentWillUnmount() {
+    UserStore.off('clientUpdateAddContactOpen', this.onClientUpdateAddContactOpen);
+  }
+
+  onClientUpdateAddContactOpen = async update => {
+    const { open } = update;
+
+    this.setState({ openCreateContact: open });
+  }
 
   render() {
     const { value } = this.state;
@@ -46,6 +63,7 @@ class Dialogs extends Component {
             </TabPanel>
           </ScrollableTabsButtonPrevent>
         </div>
+        <CreateContact open={this.state.openCreateContact} />
       </div>
     );
   }

@@ -19,6 +19,7 @@ namespace drDotnet.Services.SignalrHub.Handler
         private  HubCallerContext Context { get; set; }
         private readonly Contact.ContactClient _contactClient;
         private readonly long UserIdentifier;
+        private readonly string AccessToken;
 
         public ContactHandler(IHubCallerClients clients, HubCallerContext context, Contact.ContactClient contactClient)
         {
@@ -26,18 +27,32 @@ namespace drDotnet.Services.SignalrHub.Handler
             Context = context;
             _contactClient = contactClient;
             UserIdentifier = Int64.Parse(Context.UserIdentifier);
+            AccessToken = Context.GetHttpContext().Request.Query["access_token"];
+        }
+
+        public async Task CreateContact(string msg)
+        {
+            var data = JsonSerializer.Deserialize<CreateContactMsgObj>(msg);
+            var request = ContactCreateRequest(data);
+
+            var authHeader = GetAuthorizationHeader();
+
+            var result = await _contactClient.CreateContactAsync(request, authHeader);
+
+            await SendBack(MakeObjBase(MessageDataType.updateCreateContact, result));
+
+            var contactUser = await _contactClient
+                .GetContactAsync(ContactItemRequest(result.UserId), authHeader);
+
+            await SendBack(MakeObjBase(MessageDataType.UpdateUser, MapToUpdateUser(contactUser)));
         }
 
         public async Task GetContacts(string msg)
         {
             var data = JsonSerializer.Deserialize<GetContactsMsgObj>(msg);
-            var request = CreateContactItemsRequest(data);
+            var request = ContactItemsRequest(data);
 
-            var accessToken = Context.GetHttpContext().Request.Query["access_token"];
-            var headers = new Metadata();
-            headers.Add("Authorization", $"Bearer {accessToken}");
-
-            var result = await _contactClient.GetContactsAsync(request, headers);
+            var result = await _contactClient.GetContactsAsync(request, GetAuthorizationHeader());
             List<long> userIds = new List<long>();
             
             foreach(var contact in result.Data)
@@ -47,13 +62,30 @@ namespace drDotnet.Services.SignalrHub.Handler
                 await SendBack(MakeObjBase(MessageDataType.UpdateUser, user));
             }
 
-            var updateContact = MapToUpdateContact(userIds, result);
+            var updateContact = MapToUpdateContacts(userIds, result);
             await SendBack(MakeObjBase(MessageDataType.UpdateContact, updateContact));
         }
 
-        private ContactItemsRequest CreateContactItemsRequest(GetContactsMsgObj data)
+        private Metadata GetAuthorizationHeader()
+        {
+            var headers = new Metadata();
+            headers.Add("Authorization", $"Bearer {AccessToken}");
+            return headers;
+        }
+
+        private ContactItemsRequest ContactItemsRequest(GetContactsMsgObj data)
         {
             return new ContactItemsRequest { PageIndex = data.PageIndex, PageSize = data.PageSize };
+        }
+
+        private ContactCreateRequest ContactCreateRequest(CreateContactMsgObj data)
+        {
+            return new ContactCreateRequest { Name = data.Name, Email = data.Email };
+        }
+
+        private ContactItemRequest ContactItemRequest(long id)
+        {
+            return new ContactItemRequest { Id = id };
         }
 
         private MessageObjectBase MakeObjBase(string type, object data)
@@ -70,9 +102,9 @@ namespace drDotnet.Services.SignalrHub.Handler
             await Clients.Caller.SendAsync("update", data);
         }
 
-        private UpdateContact MapToUpdateContact(List<long> ids, PaginatedContactResponse con)
+        private UpdateContacts MapToUpdateContacts(List<long> ids, PaginatedContactResponse con)
         {
-            return new UpdateContact
+            return new UpdateContacts
             {
                 Ids = ids,
                 PageIndex = con.PageIndex,

@@ -32,6 +32,18 @@ class UserStore extends EventEmitter {
         }
     }
 
+    onClientUpdate = update => {
+
+        switch (update["type"]) {
+            case 'clientUpdateAddContactOpen':
+                this.emit(update['type'], update);
+                break;
+        
+            default:
+                break;
+        }
+    }
+
     get(userId) {
         return this.items.get(userId);
     }
@@ -42,10 +54,12 @@ class UserStore extends EventEmitter {
 
     addConListener = () => {
         ConController.on("update", this.onUpdate);
+        ConController.on("clientUpdate", this.onClientUpdate);
     }
 
     removeConListener = () => {
         ConController.off("update", this.onUpdate);
+        ConController.off("clientUpdate", this.onClientUpdate);
     }
 }
 
