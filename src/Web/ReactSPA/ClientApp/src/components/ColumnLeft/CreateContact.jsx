@@ -33,7 +33,11 @@ class CreateContact extends Component {
   }
 
   handleCreate = () => {
-    
+      const { email, name } = this.state;
+    ConController.send({
+        type: "createContact",
+        data: JSON.stringify({ Name: name, Email: email })
+    });
   }
 
   render() {
@@ -53,7 +57,6 @@ class CreateContact extends Component {
             onChange={this.handleInputChange}
           />
           <TextField
-            autoFocus
             required
             margin="dense"
             id="email"

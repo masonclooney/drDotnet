@@ -1,0 +1,46 @@
+version: "3.9"
+
+services: 
+    contact:
+        build: 
+            context: .
+            dockerfile: Services/Contact/Contact.API/Dockerfile
+        ports: 
+            - 7000:80
+            - 7001:443
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=https://+:443;http://+:80
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=Meysam@1374
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+        volumes:
+            - ~/.aspnet/https:/https:ro
+    identity:
+        build: 
+            context: .
+            dockerfile: Services/identity/identity.API/Dockerfile
+        ports: 
+            - 5000:80
+            - 5001:443
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=https://+:443;http://+:80
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=Meysam@1374
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+        volumes:
+            - ~/.aspnet/https:/https:ro
+    signalr-hub:
+        build: 
+            context: .
+            dockerfile: Services/SignalrHub/Dockerfile
+        ports: 
+            - 8000:80
+            - 8001:443
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_URLS=https://+:443;http://+:80
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=Meysam@1374
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+        volumes:
+            - ~/.aspnet/https:/https:ro
+    
