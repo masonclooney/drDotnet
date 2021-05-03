@@ -11,6 +11,7 @@ COPY "drDotnet-ServicesAndWebApps.sln" "drDotnet-ServicesAndWebApps.sln"
 COPY "Services/Contact/Contact.API/Contact.API.csproj" "Services/Contact/Contact.API/Contact.API.csproj"
 COPY "Services/Identity/Identity.API/Identity.API.csproj" "Services/Identity/Identity.API/Identity.API.csproj"
 COPY "Services/SignalrHub/SignalrHub.csproj" "Services/SignalrHub/SignalrHub.csproj"
+COPY "Web/ReactSPA/drDotnet.ReactSPA.csproj" "Web/ReactSPA/drDotnet.ReactSPA.csproj"
 
 RUN dotnet restore "drDotnet-ServicesAndWebApps.sln"
 
