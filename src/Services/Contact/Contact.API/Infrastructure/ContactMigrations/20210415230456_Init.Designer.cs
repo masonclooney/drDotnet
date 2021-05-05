@@ -8,7 +8,7 @@ using drDotnet.Services.Contact.API.Infrastructure;
 
 namespace Contact.API.Infrastructure.ContactMigrations
 {
-    [DbContext(typeof(ContactContext))]
+    [DbContext(typeof(ContactDbContext))]
     [Migration("20210415230456_Init")]
     partial class Init
     {

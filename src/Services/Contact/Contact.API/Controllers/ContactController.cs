@@ -19,8 +19,8 @@ namespace drDotnet.Services.Contact.API.Controllers
     [Route("[controller]")]
     public class ContactController : ControllerBase
     {
-        private readonly ContactContext _contactContext;
-        public ContactController(ContactContext contactContext)
+        private readonly ContactDbContext _contactContext;
+        public ContactController(ContactDbContext contactContext)
         {
             _contactContext = contactContext ?? throw new ArgumentException(nameof(contactContext));
 

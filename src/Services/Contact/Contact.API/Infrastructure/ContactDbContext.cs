@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace drDotnet.Services.Contact.API.Infrastructure
 {
-    public class ContactContext : DbContext
+    public class ContactDbContext : DbContext
     {
-        public ContactContext(DbContextOptions<ContactContext> options) : base(options)
+        public ContactDbContext(DbContextOptions<ContactDbContext> options) : base(options)
         {
         }
         public DbSet<User> Users { get; set; }
@@ -19,14 +19,14 @@ namespace drDotnet.Services.Contact.API.Infrastructure
             modelBuilder.ApplyConfiguration(new ContactEntityTypeConfiguration());
         }
 
-        public class ContactContextDesignFactory : IDesignTimeDbContextFactory<ContactContext>
+        public class ContactDbContextDesignFactory : IDesignTimeDbContextFactory<ContactDbContext>
         {
-            public ContactContext CreateDbContext(string[] args)
+            public ContactDbContext CreateDbContext(string[] args)
             {
-                var optionsBuilder = new DbContextOptionsBuilder<ContactContext>()
+                var optionsBuilder = new DbContextOptionsBuilder<ContactDbContext>()
                     .UseSqlServer("Server=localhost; Database=drDotnetContact; User=sa; Password=Meysam@1374");
 
-                return new ContactContext(optionsBuilder.Options);
+                return new ContactDbContext(optionsBuilder.Options);
             }
         }
     }

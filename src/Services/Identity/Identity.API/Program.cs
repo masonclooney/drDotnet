@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using drDotnet.Services.Identity.API.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -36,7 +37,9 @@ namespace drDotnet.Services.Identity.API
             try
             {
                 Log.Information("Starting host...");
-                CreateHostBuilder(args).Build().Run();
+                var host = CreateHostBuilder(args).Build();
+                host.MigrateDbContext<AppDbContext>();
+                host.Run();
                 return 0;
             }
             catch (Exception ex)

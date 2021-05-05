@@ -7,7 +7,7 @@ using drDotnet.Services.Contact.API.Infrastructure;
 
 namespace Contact.API.Infrastructure.ContactMigrations
 {
-    [DbContext(typeof(ContactContext))]
+    [DbContext(typeof(ContactDbContext))]
     partial class ContactContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
