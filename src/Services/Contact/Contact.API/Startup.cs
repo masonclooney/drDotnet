@@ -110,7 +110,7 @@ namespace drDotnet.Services.Contact.API
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEntityFrameworkSqlServer()
-                .AddDbContext<ContactContext>(options =>
+                .AddDbContext<ContactDbContext>(options =>
                 {
                     options.UseSqlServer(configuration["ConnectionString"],
                                         sqlServerOptionsAction: sqlOptions =>
@@ -118,7 +118,7 @@ namespace drDotnet.Services.Contact.API
                                             sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                                             sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                         });
-                });
+                }); 
 
             return services;
         }

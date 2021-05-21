@@ -41,6 +41,8 @@ namespace drDotnet.Services.Identity.API
 
             services.AddControllersWithViews();
 
+            services.AddIntegrationServices(Configuration);
+
             RegisterDbContexts(services);
 
             services.AddIdentity<AppIdentityUser, IdentityRole<long>>()
@@ -61,6 +63,8 @@ namespace drDotnet.Services.Identity.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 
