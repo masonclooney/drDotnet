@@ -4,6 +4,7 @@ using drDotnet.BuildingBlocks.EventBus;
 using drDotnet.BuildingBlocks.EventBus.Abstractions;
 using drDotnet.BuildingBlocks.EventBusRabbitMQ;
 using drDotnet.Services.Identity.API.Data;
+using drDotnet.Services.Identity.API.IntegrationEvents;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +53,8 @@ namespace drDotnet.Services.Identity.API.Helpers
 
         public static void AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<IIdentityIntegrationEventService, IdentityIntegrationEventService>();
+
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();

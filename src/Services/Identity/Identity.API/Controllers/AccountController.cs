@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using drDotnet.Services.Identity.API.IntegrationEvents;
+using drDotnet.Services.Identity.API.IntegrationEvents.Events;
 using drDotnet.Services.Identity.API.Models;
 using drDotnet.Services.Identity.API.Models.AccountViewModels;
 using IdentityServer4.Models;
@@ -18,13 +20,15 @@ namespace drDotnet.Services.Identity.API.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly SignInManager<AppIdentityUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
+        private readonly IIdentityIntegrationEventService _identityIntegrationEventService;
 
-        public AccountController(UserManager<AppIdentityUser> userManager, ILogger<AccountController> logger, SignInManager<AppIdentityUser> signInManager, IIdentityServerInteractionService interaction)
+        public AccountController(UserManager<AppIdentityUser> userManager, ILogger<AccountController> logger, SignInManager<AppIdentityUser> signInManager, IIdentityServerInteractionService interaction, IIdentityIntegrationEventService identityIntegrationEventService)
         {
             _userManager = userManager;
             _logger = logger;
             _signInManager = signInManager;
             _interaction = interaction;
+            _identityIntegrationEventService = identityIntegrationEventService;
         }
 
         [HttpGet]
@@ -126,6 +130,11 @@ namespace drDotnet.Services.Identity.API.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                         return View(model);
                     }
+                }
+                else
+                {
+                    var userRegisteredEvent = new UserRegisteredIntegrationEvent(user.Id, user.UserName, user.Email);
+                    _identityIntegrationEventService.PublishThroughEventBusAsync(userRegisteredEvent);
                 }
             }
 

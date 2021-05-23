@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace drDotnet.BuildingBlocks.EventBus.Events
 {
-    public record IntegrationEvent
+    public class IntegrationEvent
     {
         public IntegrationEvent()
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
             CreationDate = DateTime.UtcNow;
         }
 
@@ -20,15 +20,9 @@ namespace drDotnet.BuildingBlocks.EventBus.Events
         }
 
         [JsonProperty]
-        public Guid Id { get; private init; }
+        public Guid Id { get; private set; }
 
         [JsonProperty]
-        public DateTime CreationDate { get; private init; }
+        public DateTime CreationDate { get; private set; }
     }
-}
-
-namespace System.Runtime.CompilerServices
-{
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class IsExternalInit{}
 }

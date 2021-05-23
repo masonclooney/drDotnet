@@ -42,6 +42,7 @@ namespace drDotnet.Services.Identity.API
             services.AddControllersWithViews();
 
             services.AddIntegrationServices(Configuration);
+            services.AddEventBus(Configuration);
 
             RegisterDbContexts(services);
 
